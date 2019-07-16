@@ -2,6 +2,14 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <Authors>Dustin Lacewell</Authors>
+    <Description>An implementation of Tracery for .net</Description>
+    <PackageProjectUrl>https://github.com/dustinlacewell/Tracery</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/dustinlacewell/Tracery.git</RepositoryUrl>
+    <PackageTags>ProceduralGeneration</PackageTags>
+    <PackageVersion>0.1.0</PackageVersion>
+    <Title>Tracery</Title>
   </PropertyGroup>
   <Import Project="..\.paket\Paket.Restore.targets" />
 </Project>
