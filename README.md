@@ -26,8 +26,8 @@ Which can then be used to generate text:
 
             private static void Main(string[] args) {
                 var grammar = File.ReadAllText("grammar.json");
-                var parser = new Parser(grammar);
-                var output = parser.Generate();
+                var unparser = new Unparser(grammar);
+                var output = unparser.Generate();
                 Console.WriteLine(output);
             }
         }
