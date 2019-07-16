@@ -1,0 +1,6 @@
+{
+  "origin": ["Once upon a time, #who# #did# #what#. The end."],
+     "who": ["I", "you", "they"],
+     "did": ["ate", "cuddled", "gift-wrapped"],
+    "what": ["a cat", "the moon", "the president"]
+}
