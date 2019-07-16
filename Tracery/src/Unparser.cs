@@ -5,6 +5,8 @@ using System.Text.RegularExpressions;
 
 using Newtonsoft.Json;
 
+using Tracery.Tokens;
+
 using foo = System.Nullable<int>;
 
 
@@ -24,36 +26,31 @@ namespace Tracery {
         /// <summary>
         /// Key/value store for grammar rules.
         /// </summary>
-        private Dictionary<string, List<string>> Grammar;
+        private Grammar _grammar;
 
         /// <summary>
         /// Key/value store for savable data.
         /// </summary>
-        public Dictionary<string, List<List<string>>> SaveData;
+        private ActionCache _saveData;
 
         /// <summary>
         /// Modifier function table.
         /// </summary>
-        public Dictionary<string, Func<string, string>> Modifiers;
+        public readonly ModifierTable Modifiers = new ModifierTable {
+            {"a", Tracery.Modifiers.Article},
+            {"beeSpeak", Tracery.Modifiers.BeeSpeak},
+            {"capitalize", Tracery.Modifiers.Capitalize},
+            {"capitalizeAll", Tracery.Modifiers.CapitalizeAll},
+            {"comma", Tracery.Modifiers.Comma},
+            {"ed", Tracery.Modifiers.PastTense},
+            {"inQuotes", Tracery.Modifiers.InQuotes},
+            {"s", Tracery.Modifiers.Pluralize},
+            {"titleCase", Tracery.Modifiers.TitleCase}
+        };
 
-        public Unparser(string source, int? seed = null) {
-            Grammar = JsonConvert.DeserializeObject<Dictionary<string, List<string>>>(source);
-
-            // Set up the standard modifiers.
-            Modifiers = new Dictionary<string, Func<string, string>> {
-                {"a", Tracery.Modifiers.Article},
-                {"beeSpeak", Tracery.Modifiers.BeeSpeak},
-                {"capitalize", Tracery.Modifiers.Capitalize},
-                {"capitalizeAll", Tracery.Modifiers.CapitalizeAll},
-                {"comma", Tracery.Modifiers.Comma},
-                {"ed", Tracery.Modifiers.PastTense},
-                {"inQuotes", Tracery.Modifiers.InQuotes},
-                {"s", Tracery.Modifiers.Pluralize},
-                {"titleCase", Tracery.Modifiers.TitleCase}
-            };
-
-            SaveData = new Dictionary<string, List<List<string>>>();
-            
+        public Unparser(Grammar grammar, int? seed = null, ActionCache cache = null) {
+            _grammar = grammar;
+            _saveData = cache ?? new ActionCache();
             Seed(seed);
         }
 
@@ -69,10 +66,10 @@ namespace Tracery {
         /// <param name="randomSeed">Reliably seeds "random" selection to provide consistent results.</param>
         /// <returns>A result interpreted from the symbol "#origin#".</returns>
         public string Generate(int? seed = null) {
-            return Parse("#origin#", seed);
+            return Generate("#origin#", seed);
         }
 
-        public string Parse(string input, int? seed = null) {
+        public string Generate(string input, int? seed = null) {
             Seed(seed);
 
             var output = ParseInner(input);
@@ -81,7 +78,7 @@ namespace Tracery {
             // Now replace all double-escapes with single ones.
             output = output.Replace(@"\\", @"\");
             // Clear any top-level saved actions.
-            SaveData.Clear();
+            _saveData.Clear();
             return output;
         }
 
@@ -231,12 +228,12 @@ namespace Tracery {
                 return "";
             }
 
-            if (SaveData.ContainsKey(symbol)) {
-                return SaveData[symbol][SaveData[symbol].Count - 1].PickRandom();
+            if (_saveData.ContainsKey(symbol)) {
+                return _saveData[symbol][_saveData[symbol].Count - 1].PickRandom();
             }
 
-            if (Grammar.ContainsKey(symbol)) {
-                return Grammar[symbol].PickRandom();
+            if (_grammar.HasRule(symbol)) {
+                return _grammar.GetRule(symbol).PickRandom();
             }
 
             return symbol;
@@ -250,11 +247,11 @@ namespace Tracery {
         internal void PushAction(string key, params string[] options) {
             var values = options.ToList();
 
-            if (!SaveData.ContainsKey(key)) {
-                SaveData[key] = new List<List<string>>();
+            if (!_saveData.ContainsKey(key)) {
+                _saveData[key] = new List<List<string>>();
             }
 
-            SaveData[key].Add(values);
+            _saveData[key].Add(values);
         }
 
         /// <summary>
@@ -266,14 +263,14 @@ namespace Tracery {
                 return;
             }
 
-            if (!SaveData.ContainsKey(key)) {
+            if (!_saveData.ContainsKey(key)) {
                 return;
             }
 
-            SaveData[key].RemoveAt(SaveData[key].Count - 1);
+            _saveData[key].RemoveAt(_saveData[key].Count - 1);
 
-            if (SaveData[key].Count == 0) {
-                SaveData.Remove(key);
+            if (_saveData[key].Count == 0) {
+                _saveData.Remove(key);
             }
         }
 

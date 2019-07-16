@@ -16,9 +16,9 @@ namespace Tracery.Testing {
 
         [Fact]
         public void HeroGrammarWorks() {
-            var grammarText = File.ReadAllText("Grammars/hero-grammar.json");
-            var grammar = new Unparser(grammarText);
-            var output = grammar.Generate(0);
+            var grammar = Grammar.FromFile("Grammars/hero-grammar.json");
+            var unparser = new Unparser(grammar);
+            var output = unparser.Generate(0);
             var test = "Once upon a time, Chiaki the time captain left his home. Chiaki went home.";
             Assert.Equal(test, output);
         }

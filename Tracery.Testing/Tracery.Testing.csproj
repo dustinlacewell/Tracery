@@ -8,7 +8,7 @@
     <ProjectReference Include="..\Tracery\Tracery.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <None Update="Grammars\hero-grammar.json" CopyToOutputDirectory="Always" />
+    <None Update="Grammars\*.json" CopyToOutputDirectory="Always" />
   </ItemGroup>
   <Import Project="..\.paket\Paket.Restore.targets" />
 </Project>

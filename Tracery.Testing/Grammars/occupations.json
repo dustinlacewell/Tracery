@@ -1,0 +1,5 @@
+{
+  "occupationBase": ["wizard", "witch", "detective", "ballerina", "criminal","pirate", "lumberjack", "spy", "doctor", "scientist","captain", "priest"],
+  "occupationMod": ["occult ", "space ", "professional ", "gentleman ", "erotic ","time ", "cyber", "paleo", "techno", "super"],
+  "occupation": ["#occupationMod##occupationBase#"]
+}
