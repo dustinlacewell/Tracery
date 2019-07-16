@@ -13,7 +13,7 @@ namespace Tracery {
     /// <summary>
     /// A Grammar object as described in @GalaxyKate's tracery.io.
     /// </summary>
-    public class Parser {
+    public class Unparser {
 
         /// <summary>
         /// Finds escape characters that are not preceeded by an odd number of escape characters.
@@ -36,7 +36,7 @@ namespace Tracery {
         /// </summary>
         public Dictionary<string, Func<string, string>> Modifiers;
 
-        public Parser(string source, int? seed = null) {
+        public Unparser(string source, int? seed = null) {
             Grammar = JsonConvert.DeserializeObject<Dictionary<string, List<string>>>(source);
 
             // Set up the standard modifiers.

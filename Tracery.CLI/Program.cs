@@ -9,7 +9,7 @@ namespace Tracery.CLI {
 
         private static void Main(string[] args) {
             var grammar = File.ReadAllText("Tracery.Testing/Grammars/readme-grammar.json");
-            var parser = new Parser(grammar);
+            var parser = new Unparser(grammar);
 
             foreach (var i in new[] {0, 1, 2, 3, 4}) {
                 var output = parser.Generate(i);

@@ -20,7 +20,7 @@ namespace Tracery {
       }
     }
 
-    public ActionToken(Parser grammar, int start, GrammarToken parent) : base(grammar, start, parent) {
+    public ActionToken(Unparser grammar, int start, GrammarToken parent) : base(grammar, start, parent) {
       Type = TagType.Action;
     }
 
@@ -92,7 +92,7 @@ namespace Tracery {
       }
     }
 
-    public TagToken(Parser grammar, int start, GrammarToken parent) : base(grammar, start, parent) {
+    public TagToken(Unparser grammar, int start, GrammarToken parent) : base(grammar, start, parent) {
       Type = TagType.Tag;
     }
 
@@ -137,7 +137,7 @@ namespace Tracery {
   }
 
   internal abstract class GrammarToken {
-    public Parser Grammar;
+    public Unparser Grammar;
     public int Start;
     public GrammarToken Parent;
     public TagType Type;
@@ -153,7 +153,7 @@ namespace Tracery {
       return string.Format("Raw: {0}\nResolved: {1}\nIndecesOfInterest: {2}", Raw, Resolved, IndecesOfInterest.Aggregate("", (cume, ind) => cume + ", " + ind.ToString()));
     }
 
-    public GrammarToken(Parser grammar, int start, GrammarToken parent) {
+    public GrammarToken(Unparser grammar, int start, GrammarToken parent) {
       Raw = "";
       Grammar = grammar;
       Start = start;
