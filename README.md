@@ -43,3 +43,6 @@ Here's a few examples:
 
     Once upon a time, they gift-wrapped a cat. The end.
 
+Try it yourself by running the following command from the root of the repository:
+
+    dotnet run --project Tracery.CLI
