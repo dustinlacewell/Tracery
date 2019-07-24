@@ -45,12 +45,8 @@ namespace Tracery {
                 return;
             }
             
-            Console.WriteLine($"Initial filename: {filename}");
-
             var path = Path.GetDirectoryName(filename) ?? Directory.GetCurrentDirectory();
             
-            Console.WriteLine($"Import path: {path}");
-
             Imports.Select(import => Path.Combine(path, import))
                    .Select(FromFile)
                    .Select(g => g.RuleSet)
